@@ -7,11 +7,12 @@ FILE_NAME = 'bet.json'
 
 def add_new_bet():
     print(
-        'Digite sua aposta separando os números com espaços\n'
-        'Digite enter para encerrar\n\n>> Ex. 1 2 3 4 5 6'
+        'Digite sua aposta separando os números com espaços ou virgulas\n'
+        'Digite enter para encerrar\n\n>> Ex. 1 2 3 4 5 6 ou 1,2,3,4,5,6'
     )
 
     bet_input = input('>> ').strip()
+    bet_input = bet_input.replace(',', ' ')
 
     try:
         aposta = [int(x) for x in bet_input.split()]
@@ -24,15 +25,16 @@ def add_new_bet():
     with open(FILE_NAME, 'a', encoding='utf-8') as f:
         f.write(json.dumps(registro) + '\n')
 
-    print("Bet adicionado com sucesso")
+    print("Bet adicionado com sucesso\n\n")
 
 
 def verify_results():
     try:
         resultado = [
             int(x) for x in input(
-                'Insira as dezenas sorteadas separadas por espaço\n\n>> '
-            ).split()
+                'Insira as dezenas sorteadas separadas por espaço ou '
+                'vírgula\n\n>> '
+            ).replace(',', ' ').split()
         ]
     except ValueError:
         print("Os resultados devem ser com números")
