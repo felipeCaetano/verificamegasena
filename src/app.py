@@ -1,7 +1,8 @@
 import json
+import os
 import sys
 
-running = True
+
 FILE_NAME = 'bet.json'
 
 
@@ -16,6 +17,15 @@ def add_new_bet():
 
     try:
         aposta = [int(x) for x in bet_input.split()]
+        if len(aposta) < 6:
+            print("A aposta deve conter pelo menos 6 números")
+            return
+        elif len(set(aposta)) < 6:
+            print("A aposta não deve conter números repetidos")
+            return
+        if any(n < 1 or n > 60 for n in aposta):
+            print("Os números devem estar entre 1 e 60")
+            return
     except ValueError:
         print("Aposta deve conter apenas números")
         return
@@ -29,6 +39,9 @@ def add_new_bet():
 
 
 def verify_results():
+    if not os.path.exists(FILE_NAME):
+        print("Nenhuma aposta cadastrada ainda")
+        return
     try:
         resultado = [
             int(x) for x in input(
@@ -36,6 +49,18 @@ def verify_results():
                 'vírgula\n\n>> '
             ).replace(',', ' ').split()
         ]
+        if len(resultado) != 6:
+            print("O resultado deve conter exatamente 6 números")
+            return
+
+        if len(set(resultado)) != 6:
+            print("O resultado não pode conter números repetidos")
+            return
+
+        if any(n < 1 or n > 60 for n in resultado):
+            print("Os números do resultado devem estar entre 1 e 60")
+            return
+
     except ValueError:
         print("Os resultados devem ser com números")
         return
@@ -64,7 +89,7 @@ def verify_results():
                 print(f'Você tirou a sorte grande {bet}!!\nParabéns\n')
 
 
-while running:
+while True:
     option = input(
         "Digite sua opção:\n"
         "1 - cadastrar nova aposta\n"
